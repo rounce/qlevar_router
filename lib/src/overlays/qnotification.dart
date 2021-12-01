@@ -4,7 +4,6 @@ import '../../qlevar_router.dart';
 import 'qoverlay.dart';
 
 /// Show a notification in any router you have in your project
-// ignore: must_be_immutable
 class QNotification extends StatefulWidget with QOverlay {
   /// The Position where the notification should displayed
   /// LeftTop___________Top____________RightTop
@@ -40,15 +39,7 @@ class QNotification extends StatefulWidget with QOverlay {
   final Curve? animationReverseCurve;
 
   /// The content of your notification
-  final Widget? child;
-
-  /// The content builder of your notification, gives remove VoidCallback.
-  final Widget Function(VoidCallback)? widgetBuilder;
-
-  /// The duration to keep the notification open
-  /// if this value was null the notification will not close, you have to call
-  /// `remove` to close it.
-  final Duration? duration;
+  final Widget child;
 
   /// A work to do when the notification is open
   final VoidCallback? onOpened;
@@ -58,70 +49,44 @@ class QNotification extends StatefulWidget with QOverlay {
 
   /// The notification color
   final Color? color;
+  @override
+  final Duration? duration;
+
+  @override
+  final String? overlayKey;
 
   QNotification({
-    this.child,
-    this.widgetBuilder,
+    required this.child,
     this.position = QNotificationPosition.Top,
     this.offset = Offset.zero,
+    this.overlayKey,
     this.height = 100,
     this.animationDurationMilliseconds = 800,
     this.animationReverseDurationMilliseconds,
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
     this.animationReverseCurve,
     this.width,
-    this.duration = const Duration(seconds: 2),
     this.onClosed,
+    this.duration = const Duration(seconds: 2),
     this.onOpened,
     this.color,
-  }) : assert(child != null || widgetBuilder != null);
+  });
 
   _NotificationState? _state;
 
   @override
   _NotificationState createState() {
-    final state = _NotificationState();
-    _state = state;
-    return state;
+    _state = _NotificationState();
+    return _state!;
   }
-
-  OverlayEntry? _overlay;
 
   @override
-  Future<T?> show<T>(
-      {String? name, NavigatorState? state, BuildContext? context}) async {
-    if (state == null || context == null) {
-      if (name == null) {
-        return await QR.rootNavigator.show(this);
-      } else {
-        return await QR.navigatorOf(name).show(this);
-      }
+  Future<T?> show<T>({String? name}) async {
+    if (name == null) {
+      return await QR.rootNavigator.show(this);
     }
-
-    if (_overlay == null) {
-      final p = _calcPosition(context);
-      _overlay = OverlayEntry(
-        builder: (context) => Positioned(
-          width: width,
-          left: p.dx,
-          top: p.dy,
-          height: height,
-          child: this,
-        ),
-      );
-    }
-    state.overlay!.insert(_overlay!);
-    if (duration != null) {
-      Future.delayed(duration!, remove);
-    }
+    return await QR.navigatorOf(name).show(this);
   }
-
-  void remove() => _state!.remove().then((_) {
-        if (onClosed != null) {
-          onClosed!();
-        }
-        _overlay!.remove();
-      });
 
   Offset _calcPosition(BuildContext context) {
     Offset result;
@@ -160,6 +125,24 @@ class QNotification extends StatefulWidget with QOverlay {
     }
     return Offset(result.dx + offset.dx, result.dy + offset.dy);
   }
+
+  @override
+  List<OverlayEntry> buildEntries<T>(BuildContext context) {
+    final p = _calcPosition(context);
+    return [
+      OverlayEntry(
+          builder: (_) => Positioned(
+                width: width,
+                left: p.dx,
+                top: p.dy,
+                height: height,
+                child: this,
+              ))
+    ];
+  }
+
+  @override
+  TickerFuture get remove => _state!.remove();
 }
 
 class _NotificationState extends State<QNotification>
@@ -196,6 +179,7 @@ class _NotificationState extends State<QNotification>
       case QNotificationPosition.LeftTop:
       case QNotificationPosition.LeftCenter:
       case QNotificationPosition.LeftBottom:
+      case QNotificationPosition.Center:
         return const Offset(-1, 0);
       case QNotificationPosition.Top:
         return const Offset(0, -1);
@@ -237,9 +221,7 @@ class _NotificationState extends State<QNotification>
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _offsetAnimation,
-      child: Card(
-          color: widget.color,
-          child: widget.child ?? widget.widgetBuilder!(widget.remove)),
+      child: Card(color: widget.color, child: widget.child),
     );
   }
 }

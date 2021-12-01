@@ -34,12 +34,12 @@ class NestedRoutePage extends StatelessWidget {
                               ));
                     },
                     child: Text('Normal show dialog function')),
-                TextButton(
-                    onPressed: () {
-                      router.navigator.show(QDialog(
-                          widget: (onPop) => AlertDialog(title: Text('Hi'))));
-                    },
-                    child: Text('Show QDialog')),
+                // TextButton(
+                //     onPressed: () {
+                //       router.navigator.show(QDialog(
+                //           widget: (onPop) => AlertDialog(title: Text('Hi'))));
+                //     },
+                //     child: Text('Show QDialog')),
               ],
             ),
           ),

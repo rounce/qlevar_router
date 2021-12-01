@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [Current]
+
+- Change Dialog to overlay.
+- Add OverlayController
+- Add QPanel
+
 ## [1.5.8] 30.11.2021
 
 - Add `QR.IsSamePath`, `QR.isSameName`

@@ -13,6 +13,7 @@ import '../routes/qroute_internal.dart';
 import '../types/qhistory.dart';
 import 'match_controller.dart';
 import 'middleware_controller.dart';
+import 'overlays_controller.dart';
 import 'pages_controller.dart';
 
 abstract class QNavigator extends ChangeNotifier {
@@ -400,8 +401,7 @@ class QRouterController extends QNavigator {
   @override
   Future<T?> show<T>(QOverlay overlay) {
     assert(navKey.currentState != null);
-    return overlay.show(
-        state: navKey.currentState!, context: navKey.currentContext!);
+    return QR.overlays.add<T>(navKey, overlay);
   }
 
   @override

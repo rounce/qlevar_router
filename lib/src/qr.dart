@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../qlevar_router.dart';
 import 'controllers/controller_manager.dart';
 import 'controllers/match_controller.dart';
+import 'controllers/overlays_controller.dart';
 import 'controllers/qrouter_controller.dart';
 import 'helpers/platform/configure_web.dart'
     if (dart.library.io) 'helpers/platform/configure_nonweb.dart';
@@ -31,6 +32,9 @@ class QRContext {
 
   /// Add observer for the navigation or pop
   final observer = QObserver();
+
+  /// The controller for the overlays in the project
+  final overlays = OverlaysController();
 
   final _manager = ControllerManager();
 

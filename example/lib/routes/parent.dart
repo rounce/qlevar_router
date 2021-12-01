@@ -52,22 +52,22 @@ class ParentRoutes {
                 path: '/child-6',
                 builder: () => TextPage('Should this child pop?'),
                 middleware: [
-                  QMiddlewareBuilder(canPopFunc: () async {
-                    final result = await QR.show<bool>(QDialog(
-                        widget: (pop) => AlertDialog(
-                              title: Text('Do you want to go back?'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => pop(true),
-                                    child: Text('Yes')),
-                                TextButton(
-                                    onPressed: () => pop(false),
-                                    child: Text('No'))
-                              ],
-                            )));
+                  // QMiddlewareBuilder(canPopFunc: () async {
+                  //   final result = await QR.show<bool>(QDialog(
+                  //       widget: (pop) => AlertDialog(
+                  //             title: Text('Do you want to go back?'),
+                  //             actions: [
+                  //               TextButton(
+                  //                   onPressed: () => pop(true),
+                  //                   child: Text('Yes')),
+                  //               TextButton(
+                  //                   onPressed: () => pop(false),
+                  //                   child: Text('No'))
+                  //             ],
+                  //           )));
 
-                    return result ?? false;
-                  })
+                  //   return result ?? false;
+                  // })
                 ]),
           ]);
 }
