@@ -38,7 +38,7 @@ class QRouterDelegate extends RouterDelegate<String> with ChangeNotifier {
   final bool alwaysAddInitPath;
 
   /// The initial router when the app starts
-  final String? initPath;
+  String? initPath;
 
   /// The navigation key for the navigator
   final GlobalKey<NavigatorState> key;
@@ -178,6 +178,10 @@ class QRouterDelegate extends RouterDelegate<String> with ChangeNotifier {
         return QR.settings.initPage;
       },
     );
+  }
+
+  void setInitPath(String newPath) {
+    initPath = newPath;
   }
 }
 
