@@ -1,5 +1,13 @@
 # CHANGELOG
 
+# 1.10.3
+
+- Fixes #148
+
+# 1.10.2
+
+- Fixes #147
+
 ## 1.10.1
 
 - #140 Fix route restoration by @rounce
